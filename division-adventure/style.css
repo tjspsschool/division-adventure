@@ -137,6 +137,18 @@ h1 {
     box-shadow: 0 4px 0 #9d174d;
 }
 
+.btn-next-pulse {
+    animation: pulse 1.5s infinite;
+    background: var(--success) !important;
+    box-shadow: 0 4px 0 #065f46 !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 /* 練習題 */
 .math-card {
     font-size: 3rem;

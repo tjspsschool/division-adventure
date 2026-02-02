@@ -134,31 +134,104 @@ function divide1(el) {
 }
 
 // --- 練習題 ---
-let pQ = {};
+let pQ = { dividend: 0, divisor: 0, q: 0, r: 0 };
+let practiceCount = 0;
+let isAnswerCorrect = false;
+const TOTAL_PRACTICE = 5;
+
 function initPractice() {
+    console.log("Initializing practice...");
+    practiceCount = 0;
+    isAnswerCorrect = false;
+    nextPractice();
+}
+
+function nextPractice() {
+    practiceCount++;
+    isAnswerCorrect = false;
+    console.log("Next practice:", practiceCount);
+    
+    const titleEl = document.getElementById('practice-title');
+    const progressEl = document.getElementById('practice-progress');
+    const qEl = document.getElementById('practice-q');
+    const inputQ = document.getElementById('input-q');
+    const inputR = document.getElementById('input-r');
+    const btnCheck = document.getElementById('btn-check-answer');
+    const btnGame = document.getElementById('btn-to-game');
+    const spanRemainder = document.querySelector('#screen-4 span');
+
+    if (practiceCount > TOTAL_PRACTICE) {
+        titleEl.innerText = "🎉 挑戰成功！";
+        progressEl.innerText = "你已經連續答對 5 題，是除法小達人！";
+        qEl.innerHTML = "<div style='font-size: 6rem;'>🏆</div>";
+        inputQ.classList.add('hidden');
+        inputR.classList.add('hidden');
+        if (spanRemainder) spanRemainder.classList.add('hidden');
+        btnGame.classList.remove('hidden');
+        btnCheck.classList.add('hidden');
+        return;
+    }
+
+    progressEl.innerText = `第 ${practiceCount} / ${TOTAL_PRACTICE} 題`;
     const d1 = Math.floor(Math.random() * 8) + 2; 
     const d2 = (Math.floor(Math.random() * 5) + 1) * 10 + Math.floor(Math.random() * 9); 
     pQ = { dividend: d2, divisor: d1, q: Math.floor(d2/d1), r: d2 % d1 };
-    document.getElementById('practice-q').innerText = `${pQ.dividend} ÷ ${pQ.divisor} = ?`;
-    document.getElementById('input-q').value = '';
-    document.getElementById('input-r').value = '';
+    
+    qEl.innerText = `${pQ.dividend} ÷ ${pQ.divisor} = ?`;
+    inputQ.value = '';
+    inputR.value = '';
+    
+    inputQ.classList.remove('hidden');
+    inputR.classList.remove('hidden');
+    if (spanRemainder) spanRemainder.classList.remove('hidden');
+    btnCheck.classList.remove('hidden');
+    
+    btnCheck.innerText = "檢查答案";
+    btnCheck.classList.remove('btn-next-pulse');
     document.getElementById('practice-feedback').classList.add('hidden');
-    document.getElementById('btn-to-game').classList.add('hidden');
+    btnGame.classList.add('hidden');
+}
+
+function handlePracticeButtonClick() {
+    console.log("Button clicked, correct state:", isAnswerCorrect);
+    if (isAnswerCorrect) {
+        document.getElementById('practice-feedback').classList.add('hidden');
+        nextPractice();
+    } else {
+        checkPractice();
+    }
 }
 
 function checkPractice() {
-    const uQ = parseInt(document.getElementById('input-q').value);
-    const uR = parseInt(document.getElementById('input-r').value) || 0;
+    const inputQ = document.getElementById('input-q');
+    const inputR = document.getElementById('input-r');
+    const qVal = inputQ.value.trim();
+    const rVal = inputR.value.trim();
+    
     const f = document.getElementById('practice-feedback');
     f.classList.remove('hidden');
 
+    if (qVal === "") {
+        f.className = "feedback-bubble feedback-wrong";
+        f.innerText = "請輸入答案喔！";
+        return;
+    }
+
+    const uQ = parseInt(qVal);
+    const uR = parseInt(rVal) || 0;
+
     if (uQ === pQ.q && uR === pQ.r) {
+        isAnswerCorrect = true;
         f.className = "feedback-bubble feedback-correct";
         f.innerText = "太棒了！完全正確！✨";
-        document.getElementById('btn-to-game').classList.remove('hidden');
+        
+        const btn = document.getElementById('btn-check-answer');
+        btn.innerText = (practiceCount < TOTAL_PRACTICE) ? "挑戰下一題 ➜" : "查看總結 ➜";
+        btn.classList.add('btn-next-pulse');
     } else {
+        isAnswerCorrect = false;
         f.className = "feedback-bubble feedback-wrong";
-        f.innerText = `不對喔。提示：${pQ.divisor} 乘以 ${uQ || 0} 是 ${pQ.divisor * (uQ||0)}，離 ${pQ.dividend} 還差一點。`;
+        f.innerText = `不對喔。提示：${pQ.divisor} 乘以 ${uQ} 是 ${pQ.divisor * uQ}，離 ${pQ.dividend} 還差一點。`;
     }
 }
 

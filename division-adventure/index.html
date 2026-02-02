@@ -89,7 +89,8 @@
 
         <!-- 第五幕：練習題 -->
         <div id="screen-4" class="screen hidden">
-            <h2>📝 挑戰練習</h2>
+            <h2 id="practice-title">📝 挑戰練習</h2>
+            <div id="practice-progress" style="margin-bottom: 10px; font-weight: bold; color: var(--secondary);">第 1 / 5 題</div>
             <div id="practice-q" class="math-card"></div>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <input type="number" id="input-q" class="input-large" placeholder="商">
@@ -97,7 +98,7 @@
                 <input type="number" id="input-r" class="input-large" placeholder="0">
             </div>
             <div id="practice-feedback" class="feedback-bubble hidden"></div>
-            <button class="btn" onclick="checkPractice()">檢查答案</button>
+            <button id="btn-check-answer" class="btn" onclick="handlePracticeButtonClick()">檢查答案</button>
             <button id="btn-to-game" class="btn btn-secondary hidden" onclick="nextScreen()">前往終極小遊戲 ➜</button>
         </div>
 
