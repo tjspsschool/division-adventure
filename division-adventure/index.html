@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>除法小超人：補救教學課程</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>✨ 除法小超人：冒險之旅 ✨</h1>
+        
+        <div class="nav-dots">
+            <div class="dot active" onclick="jumpTo(0)"></div>
+            <div class="dot" onclick="jumpTo(1)"></div>
+            <div class="dot" onclick="jumpTo(2)"></div>
+            <div class="dot" onclick="jumpTo(3)"></div>
+            <div class="dot" onclick="jumpTo(4)"></div>
+            <div class="dot" onclick="jumpTo(5)"></div>
+        </div>
+
+        <!-- 第一幕：漫畫導引 1 -->
+        <div id="screen-0" class="screen">
+            <div style="font-size: 5rem;">🐱</div>
+            <h2>嘿！我是領航貓</h2>
+            <p style="font-size: 1.4rem; text-align: center; max-width: 600px;">
+                我們有 <strong>42</strong> 塊餅乾要分給 <strong>3</strong> 個好朋友。<br><br>
+                但是數量好多喔，<br>
+                我們不能只靠九九乘法表了！
+            </p>
+            <button class="btn" onclick="nextScreen()">看看怎麼分 ➜</button>
+        </div>
+
+        <!-- 第二幕：漫畫導引 2 (邏輯說明) -->
+        <div id="screen-1" class="screen hidden">
+            <div style="font-size: 5rem;">💡</div>
+            <h2>秘密招式：先分「大」的！</h2>
+            <p style="font-size: 1.2rem; text-align: center; max-width: 600px;">
+                我們可以把 42 拆開來：<br>
+                變成 <strong>4 個「10」</strong> 和 <strong>2 個「1」</strong>。<br><br>
+                我們先來分那些「10」的長條積木吧！
+            </p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <div class="block-10"></div><div class="block-10"></div><div class="block-10"></div><div class="block-10"></div>
+                <div style="width: 20px;"></div>
+                <div class="block-1"></div><div class="block-1"></div>
+            </div>
+            <button class="btn" onclick="nextScreen()">動手分分看 ➜</button>
+        </div>
+
+        <!-- 第三幕：具象化操作 (分10s) -->
+        <div id="screen-2" class="screen hidden">
+            <h2>第一步：分「10 個一捆」的積木</h2>
+            <p>請點擊積木，分給三位小朋友。</p>
+            
+            <div class="work-area">
+                <div id="stock-10" class="bin">
+                    <div class="bin-label">剩下的積木</div>
+                    <div id="blocks-10-container"></div>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <div id="target-0" class="bin"><div class="bin-label">朋友 A</div></div>
+                    <div id="target-1" class="bin"><div class="bin-label">朋友 B</div></div>
+                    <div id="target-2" class="bin"><div class="bin-label">朋友 C</div></div>
+                </div>
+            </div>
+            <p id="step1-msg" style="font-weight: bold; color: var(--primary);"></p>
+            <button id="btn-break" class="btn btn-secondary hidden" onclick="breakAndProceed()">把剩下的 10 拆開 ➜</button>
+        </div>
+
+        <!-- 第四幕：具象化操作 (分1s) -->
+        <div id="screen-3" class="screen hidden">
+            <h2>第二步：把剩下的拆開一起分</h2>
+            <p>剛剛剩下 1 個「10」，拆開變成 10 個「1」，加上原本的 2 個，總共 12 個。</p>
+            <div class="work-area">
+                <div id="stock-1" class="bin">
+                    <div class="bin-label">小積木池</div>
+                    <div id="blocks-1-container"></div>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <div id="final-0" class="bin"><div class="bin-label">朋友 A</div></div>
+                    <div id="final-1" class="bin"><div class="bin-label">朋友 B</div></div>
+                    <div id="final-2" class="bin"><div class="bin-label">朋友 C</div></div>
+                </div>
+            </div>
+            <p id="step2-msg" style="font-weight: bold; color: var(--primary);"></p>
+            <button id="btn-practice" class="btn hidden" onclick="nextScreen()">我學會了，去練習！ ➜</button>
+        </div>
+
+        <!-- 第五幕：練習題 -->
+        <div id="screen-4" class="screen hidden">
+            <h2>📝 挑戰練習</h2>
+            <div id="practice-q" class="math-card"></div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="number" id="input-q" class="input-large" placeholder="商">
+                <span style="font-size: 1.5rem;">餘數</span>
+                <input type="number" id="input-r" class="input-large" placeholder="0">
+            </div>
+            <div id="practice-feedback" class="feedback-bubble hidden"></div>
+            <button class="btn" onclick="checkPractice()">檢查答案</button>
+            <button id="btn-to-game" class="btn btn-secondary hidden" onclick="nextScreen()">前往終極小遊戲 ➜</button>
+        </div>
+
+        <!-- 第六幕：遊戲 -->
+        <div id="screen-5" class="screen hidden">
+            <h2>🎮 除法保衛戰 (慢速版)</h2>
+            <p>點擊正確的商（答案），保護餅乾！</p>
+            <div id="game-container">
+                <canvas id="game-canvas"></canvas>
+                <div id="game-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); color: white; border-radius: 20px;">
+                    <h3 id="game-status">準備好了嗎？</h3>
+                    <button class="btn" onclick="startGame()">點我開始</button>
+                </div>
+            </div>
+            <div style="margin-top: 10px; font-weight: bold;">
+                分數: <span id="game-score">0</span> | 生命: <span id="game-lives">3</span>
+            </div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
