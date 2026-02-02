@@ -17,22 +17,61 @@
             <div class="dot" onclick="jumpTo(3)"></div>
             <div class="dot" onclick="jumpTo(4)"></div>
             <div class="dot" onclick="jumpTo(5)"></div>
+            <div class="dot" onclick="jumpTo(6)"></div>
+            <div class="dot" onclick="jumpTo(7)"></div>
         </div>
 
-        <!-- 第一幕：漫畫導引 1 -->
+        <!-- 第 0 幕：小漫畫引導 -->
         <div id="screen-0" class="screen">
-            <div style="font-size: 5rem;">🐱</div>
-            <h2>嘿！我是領航貓</h2>
-            <p style="font-size: 1.4rem; text-align: center; max-width: 600px;">
-                我們有 <strong>42</strong> 塊餅乾要分給 <strong>3</strong> 個好朋友。<br><br>
-                但是數量好多喔，<br>
-                我們不能只靠九九乘法表了！
-            </p>
-            <button class="btn" onclick="nextScreen()">看看怎麼分 ➜</button>
+            <h2>📦 緊急任務：神祕的箱子</h2>
+            <div class="comic-container">
+                <div class="comic-panel" id="p1">
+                    <div class="comic-emoji">🐱</div>
+                    <div class="comic-text">哇！領航貓發現了<br>一箱好吃的餅乾！</div>
+                </div>
+                <div class="comic-panel" id="p2">
+                    <div class="comic-emoji">🍪</div>
+                    <div class="comic-text">數一數，總共有<br><strong>42</strong> 塊餅乾耶！</div>
+                </div>
+                <div class="comic-panel" id="p3">
+                    <div class="comic-emoji">👥</div>
+                    <div class="comic-text">有 3 個好朋友<br>想平分這些餅乾...</div>
+                </div>
+                <div class="comic-panel" id="p4">
+                    <div class="comic-emoji">🤯</div>
+                    <div class="comic-text">糟了！42 太大了，<br>乘法表算不出來！</div>
+                </div>
+            </div>
+            <button class="btn" id="btn-comic-next" onclick="nextScreen()" style="margin-top: 30px;">幫幫領航貓 ➜</button>
         </div>
 
-        <!-- 第二幕：漫畫導引 2 (邏輯說明) -->
+        <!-- 第 1 幕：引導說明 -->
         <div id="screen-1" class="screen hidden">
+            <div style="font-size: 5rem;">🐱</div>
+            <h2>別擔心，我是領航貓</h2>
+            <p style="font-size: 1.4rem; text-align: center; max-width: 600px;">
+                雖然 42 塊餅乾很多，<br>
+                但我們有一套神祕的「分堆術」！<br><br>
+                只要學會這一招，<br>
+                再大的數字都難不倒你！
+            </p>
+            <button class="btn" onclick="nextScreen()">學習分堆術 ➜</button>
+        </div>
+
+        <!-- 新增第 2 幕：分堆術演示動畫 -->
+        <div id="screen-2" class="screen hidden">
+            <h2>✨ 魔法分堆術：變變變！ ✨</h2>
+            <p>看！我們把 42 個小積木，變成了好分的大積木！</p>
+            <div id="animation-area" style="width: 100%; height: 300px; position: relative; background: #fff; border-radius: 20px; overflow: hidden; margin-top: 20px;">
+                <div id="anim-cookies-container"></div>
+                <div id="anim-blocks-container" style="display: flex; gap: 10px; justify-content: center; align-items: flex-end; height: 100%; padding-bottom: 20px;"></div>
+            </div>
+            <p id="anim-msg" style="font-weight: bold; color: var(--secondary); margin-top: 15px;"></p>
+            <button class="btn hidden" id="btn-anim-next" onclick="nextScreen()">看怎麼分 ➜</button>
+        </div>
+
+        <!-- 第 3 幕：邏輯說明 -->
+        <div id="screen-3" class="screen hidden">
             <div style="font-size: 5rem;">💡</div>
             <h2>秘密招式：先分「大」的！</h2>
             <p style="font-size: 1.2rem; text-align: center; max-width: 600px;">
@@ -48,8 +87,8 @@
             <button class="btn" onclick="nextScreen()">動手分分看 ➜</button>
         </div>
 
-        <!-- 第三幕：具象化操作 (分10s) -->
-        <div id="screen-2" class="screen hidden">
+        <!-- 第 4 幕：具象化操作 (10s) -->
+        <div id="screen-4" class="screen hidden">
             <h2>第一步：分「10 個一捆」的積木</h2>
             <p>請點擊積木，分給三位小朋友。</p>
             
@@ -68,8 +107,8 @@
             <button id="btn-break" class="btn btn-secondary hidden" onclick="breakAndProceed()">把剩下的 10 拆開 ➜</button>
         </div>
 
-        <!-- 第四幕：具象化操作 (分1s) -->
-        <div id="screen-3" class="screen hidden">
+        <!-- 第 5 幕：具象化操作 (1s) -->
+        <div id="screen-5" class="screen hidden">
             <h2>第二步：把剩下的拆開一起分</h2>
             <p>剛剛剩下 1 個「10」，拆開變成 10 個「1」，加上原本的 2 個，總共 12 個。</p>
             <div class="work-area">
@@ -87,8 +126,8 @@
             <button id="btn-practice" class="btn hidden" onclick="nextScreen()">我學會了，去練習！ ➜</button>
         </div>
 
-        <!-- 第五幕：練習題 -->
-        <div id="screen-4" class="screen hidden">
+        <!-- 第 6 幕：練習題 -->
+        <div id="screen-6" class="screen hidden">
             <h2 id="practice-title">📝 挑戰練習</h2>
             <div id="practice-progress" style="margin-bottom: 10px; font-weight: bold; color: var(--secondary);">第 1 / 5 題</div>
             <div id="practice-q" class="math-card"></div>
@@ -102,8 +141,8 @@
             <button id="btn-to-game" class="btn btn-secondary hidden" onclick="nextScreen()">前往終極小遊戲 ➜</button>
         </div>
 
-        <!-- 第六幕：遊戲 -->
-        <div id="screen-5" class="screen hidden">
+        <!-- 第 7 幕：遊戲 -->
+        <div id="screen-7" class="screen hidden">
             <h2>🎮 除法保衛戰 (慢速版)</h2>
             <p>點擊正確的商（答案），保護餅乾！</p>
             <div id="game-container">

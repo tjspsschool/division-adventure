@@ -191,3 +191,50 @@ h1 {
 
 .feedback-correct { background: #d1fae5; color: #065f46; }
 .feedback-wrong { background: #fee2e2; color: #991b1b; }
+
+/* 漫畫風格 */
+.comic-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+.comic-panel {
+    background: #fff;
+    border: 3px solid #334155;
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 5px 5px 0 #cbd5e1;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+}
+
+.comic-panel.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.comic-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+}
+
+.comic-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: #f1f5f9;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 2px solid #334155;
+}
