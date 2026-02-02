@@ -24,65 +24,76 @@ function showScreen(n) {
 function runMagicAnimation() {
     const cookieContainer = document.getElementById('anim-cookies-container');
     const blockContainer = document.getElementById('anim-blocks-container');
+    const animBins = document.getElementById('anim-bins');
     const msg = document.getElementById('anim-msg');
     const btn = document.getElementById('btn-anim-next');
     
     cookieContainer.innerHTML = '';
     blockContainer.innerHTML = '';
-    msg.innerText = '準備好了嗎？魔法開始囉！';
+    animBins.classList.add('hidden');
+    msg.innerText = '42 塊餅乾太多了，先把它們綑起來！';
     btn.classList.add('hidden');
 
-    // 生成 42 個小圓點 (餅乾)
+    // 1. 餅乾轉化為積木
     for (let i = 0; i < 42; i++) {
         const c = document.createElement('div');
         c.className = 'block-1';
         c.style.position = 'absolute';
         c.style.left = Math.random() * 80 + 10 + '%';
-        c.style.top = Math.random() * 60 + 10 + '%';
-        c.style.transition = 'all 0.8s ease-in-out';
+        c.style.top = Math.random() * 50 + 10 + '%';
+        c.style.transition = 'all 0.6s ease-in-out';
         cookieContainer.appendChild(c);
     }
 
-    // 1秒後開始聚集
     setTimeout(() => {
-        msg.innerText = '1, 2, 3... 嘿！把 10 個餅乾綑在一起！';
         const cookies = cookieContainer.querySelectorAll('.block-1');
-        
-        // 變出 4 個大積木 (10)
         for (let j = 0; j < 4; j++) {
             setTimeout(() => {
                 const b10 = document.createElement('div');
-                b10.className = 'block-10';
-                b10.style.opacity = '0';
-                b10.style.transition = 'opacity 0.5s';
+                b10.className = 'block-10 anim-b10';
+                b10.style.transition = 'all 0.8s ease-in-out';
                 blockContainer.appendChild(b10);
-                setTimeout(() => b10.style.opacity = '1', 50);
-
-                // 讓 10 個小餅乾飛過去消失
                 for (let k = 0; k < 10; k++) {
                     const idx = j * 10 + k;
-                    cookies[idx].style.left = (40 + j * 5) + '%';
-                    cookies[idx].style.top = '80%';
+                    cookies[idx].style.left = '50%';
+                    cookies[idx].style.top = '50%';
                     cookies[idx].style.opacity = '0';
                 }
-            }, j * 600);
+            }, j * 400);
         }
 
-        // 剩下的 2 個
+        // 2. 自動分配積木動畫
         setTimeout(() => {
-            msg.innerText = '剩下的 2 個太小了，不用綑！';
-            cookies[40].style.left = '65%';
-            cookies[41].style.left = '70%';
-            cookies[40].style.top = '70%';
-            cookies[41].style.top = '70%';
+            msg.innerText = '現在，把這 4 個「十」分給 3 個好朋友...';
+            animBins.classList.remove('hidden');
+            animBins.style.display = 'flex';
             
-            setTimeout(() => {
-                msg.innerHTML = "✨ 魔法完成！我們現在有 <b style='color:var(--primary)'>4 個「10」</b> 和 <b style='color:var(--primary)'>2 個「1」</b> 了！";
-                btn.classList.remove('hidden');
-            }, 800);
-        }, 2500);
+            const blocks = blockContainer.querySelectorAll('.block-10');
+            const binContents = animBins.querySelectorAll('.bin-content');
 
-    }, 1000);
+            // 分前 3 個
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    blocks[i].style.position = 'absolute';
+                    const binRect = binContents[i].getBoundingClientRect();
+                    const blockRect = blocks[i].getBoundingClientRect();
+                    blocks[i].style.transform = `translate(${binRect.left - blockRect.left}px, ${binRect.top - blockRect.top + 20}px)`;
+                }, i * 800);
+            }
+
+            // 剩下 1 個
+            setTimeout(() => {
+                msg.innerHTML = "咦？還剩下 <b style='color:red'>1 個十</b> 沒辦法分給 3 個人！";
+                blocks[3].style.border = '4px solid red';
+                setTimeout(() => {
+                    msg.innerHTML = "這該怎麼辦呢？點擊按鈕看看秘密招式！";
+                    btn.classList.remove('hidden');
+                }, 1000);
+            }, 2500);
+
+        }, 2200);
+
+    }, 800);
 }
 
 function animateComic() {
